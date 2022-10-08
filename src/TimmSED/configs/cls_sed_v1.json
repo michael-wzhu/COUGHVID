@@ -1,12 +1,12 @@
 {
   "network": "SED",
   "encoder_params": {
-    "encoder": "eca_nfnet_l1",
+    "encoder": "eca_nfnet_l0",
     "duration": 15,
     "val_duration": 5,
     "backbone_params": {
       "in_chans": 1,
-      "drop_path_rate": 0.3,
+      "drop_path_rate": 0.2,
       "drop_rate": 0.4
     },
     "mel_config": {"sample_rate": 16000,
