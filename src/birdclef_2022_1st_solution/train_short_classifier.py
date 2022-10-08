@@ -179,6 +179,7 @@ def main():
     if args.val:
         trainer.validate()
         return
+
     trainer.fit()
 
 

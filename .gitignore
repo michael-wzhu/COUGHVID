@@ -8,6 +8,8 @@ __pycache__/
 # C extensions
 *.so
 
+*.pth
+
 # tests and logs
 tests/fixtures/*
 !tests/fixtures/sample_text_no_unicode.txt

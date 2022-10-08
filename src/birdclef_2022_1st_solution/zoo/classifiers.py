@@ -548,7 +548,6 @@ class TimmClassifier(nn.Module):
         return {"logit": logit}
 
 
-
 class SEDTrainableFFT(nn.Module):
     def __init__(self, encoder: str, mel_config: Dict = default_config, classes=21, attn_activation="linear",
                  pretrained=True, trainable_fft=True, **kwargs):
@@ -734,6 +733,7 @@ class C1C2(nn.Module):
             "framewise_logit": framewise_logit,
             "clipwise_output": clipwise_output
         }
+
 
 class TimmClassifierSplitCrop_v1(nn.Module):
     def __init__(self, encoder: str,
