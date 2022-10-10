@@ -7,7 +7,7 @@ def test_service():
     header = {'Content-Type': 'application/json'}
 
     data = {
-          "filename": "./datasets/covid19-cough/raw/00f16a68-4c90-41bc-8a29-3ef2dd1a3ecf.mp3"
+          "filename": "./example_videos/0a2c366d-dda1-4f86-9be9-355edbfdead9.mp3"
         }
     request = urllib.request.Request(
         url='http://127.0.0.1:9000/cough_predict',
