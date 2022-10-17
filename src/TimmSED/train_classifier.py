@@ -110,7 +110,7 @@ class AudioEvaluator(Evaluator):
 
     def get_improved_metrics(self, prev_metrics: Dict, current_metrics: Dict) -> Dict:
         improved = {}
-        for metric in ["f1_score", "lb"]:
+        for metric in ["f1_score", "lb", "auc"]:
             if current_metrics[metric] > prev_metrics[metric]:
                 print("{} improved from {:.6f} to {:.6f}".format(metric, prev_metrics[metric], current_metrics[metric]))
                 improved[metric] = current_metrics[metric]
@@ -207,7 +207,7 @@ def main():
         zero_score=args.zero_score,
         fp16=args.fp16,
         freeze_bn=args.freeze_bn,
-        mixup_prob=conf.get("mixup_prob", 0.5)
+        mixup_prob=conf.get("mixup_prob", 0.1)
     )
 
     data_train, data_val = create_data_datasets(args)

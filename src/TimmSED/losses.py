@@ -57,6 +57,7 @@ class BCEFocal2WayLoss(nn.Module):
         loss_ = loss_.sum()
         return loss_
 
+
 class BCEF2WLossCalculator(LossCalculator):
     def __init__(self, **kwargs):
         super().__init__()
@@ -107,16 +108,46 @@ class CELossCalculator(LossCalculator):
     def calculate_loss(self, outputs, targets):
         input = outputs["logit"]
         target = targets["labels"].float().cuda()
-        print("input: ", input.shape)
-        print("target: ", target.shape)
+        # print("input: ", input.shape)
+        # print("target: ", target.shape)
+
         loss = self.loss(input, target)
         #sum by class, mean by sample
         return loss.mean()
 
+
+class CEDeepSupervisedLossCalculator(LossCalculator):
+    def __init__(self, pos_weight = None, **kwargs):
+        super().__init__()
+        # if pos_weight is not None:
+        #     pos_weight = np.array([row[1] for row in pos_weight])
+        #     pos_weight = torch.from_numpy(pos_weight).float().cuda()
+        #
+        # print("pos_weight: ", pos_weight)
+
+        self.loss = CrossEntropyLoss(reduction='none', weight=None)
+        print("init loss CELoss...")
+
+    def calculate_loss(self, outputs, targets):
+        target = targets["labels"].float().cuda()
+
+        list_logits = outputs["list_logits"]
+        total_loss = 0
+        count = 0
+        for logit_ in list_logits:
+            loss_ = self.loss(logit_, target)
+            total_loss += loss_.mean()
+            count += 1
+
+        #sum by class, mean by sample
+        return total_loss / count
+
+
+
 class LabelSmoothing(nn.Module):
     """NLL loss with label smoothing.
     """
-    def __init__(self, smoothing=0.0):
+    def __init__(self, smoothing=0.1):
         """Constructor for the LabelSmoothing module.
         :param smoothing: label smoothing factor
         """
@@ -126,14 +157,16 @@ class LabelSmoothing(nn.Module):
 
     def forward(self, x, target):
         logprobs = torch.nn.functional.log_softmax(x, dim=-1)
-        nll_loss = -logprobs.gather(dim=-1, index=target.unsqueeze(1))
+        print("logprobs: ", logprobs.shape)
+        print("target: ", target.shape)
+        nll_loss = -logprobs.gather(dim=-1, index=target.unsqueeze(1).type(torch.int64))
         nll_loss = nll_loss.squeeze(1)
         smooth_loss = -logprobs.mean(dim=-1)
         loss = self.confidence * nll_loss + self.smoothing * smooth_loss
         return loss.mean()
 
 
-class SmoothingBirdLossCalculator(LossCalculator):
+class SmoothingLossCalculator(LossCalculator):
     def __init__(self, **kwargs):
         super().__init__()
         self.loss = LabelSmoothing()

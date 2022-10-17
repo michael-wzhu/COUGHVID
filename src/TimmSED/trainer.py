@@ -99,6 +99,9 @@ class PytorchTrainer(ABC):
         if self.train_config.local_rank == 0:
             self.summary_writer = SummaryWriter(os.path.join(train_config.log_dir, self.snapshot_name))
 
+        # 创建保存模型文件的路径
+        os.makedirs(self.train_config.output_dir, exist_ok=True)
+
     def validate(self):
         self.model.eval()
         metrics = self.evaluator.validate(self.get_val_loader(), self.model,
@@ -136,7 +139,6 @@ class PytorchTrainer(ABC):
             'epoch': self.current_epoch,
             'state_dict': self.model.state_dict(),
             'metrics': self.current_metrics,
-
         }, os.path.join(self.train_config.output_dir, self.snapshot_name + "_last"))
 
     def _save_best(self, improved_metrics: Dict):
@@ -146,7 +148,6 @@ class PytorchTrainer(ABC):
                 'epoch': self.current_epoch,
                 'state_dict': self.model.state_dict(),
                 'metrics': self.current_metrics,
-
             }, os.path.join(self.train_config.output_dir, self.snapshot_name + "_" + metric_name))
 
     def _run_one_epoch_train(self, loader: DataLoader):
