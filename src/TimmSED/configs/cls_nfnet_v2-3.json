@@ -1,12 +1,12 @@
 {
-  "network": "TimmClassifier_v3",
+  "network": "TimmClassifier_v2",
   "encoder_params": {
-    "encoder": "efficientnet_b3a",
+    "encoder": "eca_nfnet_l1",
     "duration": 15,
     "val_duration": 5,
     "backbone_params": {
       "in_chans": 1,
-      "drop_path_rate": 0.3,
+      "drop_path_rate": 0.2,
       "drop_rate": 0.4
     },
     "cls_head": "2layer",

@@ -406,15 +406,110 @@ class TimmClassifier_v2(nn.Module):
         #     base_model.feature_info[-1]["num_chs"],
         #     classes, bias=True)
 
-        self.list_heads = nn.ModuleList(
-            [
-                nn.Linear(base_model.feature_info[-1]["num_chs"], classes, bias=True),
-                nn.Linear(base_model.feature_info[-1]["num_chs"], classes, bias=True),
-                nn.Linear(base_model.feature_info[-1]["num_chs"], classes, bias=True),
-                nn.Linear(base_model.feature_info[-1]["num_chs"], classes, bias=True),
-                nn.Linear(base_model.feature_info[-1]["num_chs"], classes, bias=True),
-            ]
-        )
+
+        if kwargs.get("cls_head") == "simple":
+            self.list_heads = nn.ModuleList(
+                [
+                    nn.Linear(base_model.feature_info[-1]["num_chs"], classes, bias=True),
+                    nn.Linear(base_model.feature_info[-1]["num_chs"], classes, bias=True),
+                    nn.Linear(base_model.feature_info[-1]["num_chs"], classes, bias=True),
+                    nn.Linear(base_model.feature_info[-1]["num_chs"], classes, bias=True),
+                    nn.Linear(base_model.feature_info[-1]["num_chs"], classes, bias=True),
+                ]
+            )
+        elif kwargs.get("cls_head") == "2layer":
+
+            self.list_heads = nn.ModuleList(
+                [
+                    nn.Sequential(
+                        nn.Linear(base_model.feature_info[-1]["num_chs"], 512, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.Hardswish(),
+                        nn.Linear(512, 128, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.GELU(),
+                        nn.Linear(128, classes, bias=True),
+                    ),
+                    nn.Sequential(
+                        nn.Linear(base_model.feature_info[-1]["num_chs"], 512, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.Hardswish(),
+                        nn.Linear(512, 128, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.GELU(),
+                        nn.Linear(128, classes, bias=True),
+                    ),
+                    nn.Sequential(
+                        nn.Linear(base_model.feature_info[-1]["num_chs"], 512, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.Hardswish(),
+                        nn.Linear(512, 128, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.GELU(),
+                        nn.Linear(128, classes, bias=True),
+                    ),
+                    nn.Sequential(
+                        nn.Linear(base_model.feature_info[-1]["num_chs"], 512, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.Hardswish(),
+                        nn.Linear(512, 128, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.GELU(),
+                        nn.Linear(128, classes, bias=True),
+                    ),
+                    nn.Sequential(
+                        nn.Linear(base_model.feature_info[-1]["num_chs"], 512, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.Hardswish(),
+                        nn.Linear(512, 128, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.GELU(),
+                        nn.Linear(128, classes, bias=True),
+                    ),
+                ]
+            )
+
+        elif kwargs.get("cls_head") == "1layer":
+
+            self.list_heads = nn.ModuleList(
+                [
+                    nn.Sequential(
+                        nn.Linear(base_model.feature_info[-1]["num_chs"], 128, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.Hardswish(),
+                        nn.Linear(128, classes, bias=True),
+                    ),
+                    nn.Sequential(
+                        nn.Linear(base_model.feature_info[-1]["num_chs"], 128, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.Hardswish(),
+                        nn.Linear(128, classes, bias=True),
+                    ),
+                    nn.Sequential(
+                        nn.Linear(base_model.feature_info[-1]["num_chs"], 128, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.Hardswish(),
+                        nn.Linear(128, classes, bias=True),
+                    ),
+                    nn.Sequential(
+                        nn.Linear(base_model.feature_info[-1]["num_chs"], 128, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.Hardswish(),
+                        nn.Linear(128, classes, bias=True),
+                    ),
+                    nn.Sequential(
+                        nn.Linear(base_model.feature_info[-1]["num_chs"], 128, bias=True),
+                        nn.Dropout(p=0.1, inplace=True),
+                        nn.Hardswish(),
+                        nn.Linear(128, classes, bias=True),
+                    ),
+                ]
+            )
+
+        else:
+            raise ValueError
+
+
 
         ## 30 seconds -> 5 seconds
         wav_crop_len = kwargs["duration"]
@@ -549,13 +644,32 @@ class TimmClassifier_v3(nn.Module):
         #     base_model.feature_info[-1]["num_chs"],
         #     classes, bias=True)
 
-        self.head1 = nn.Sequential(
-            nn.Linear(base_model.feature_info[-1]["num_chs"], 512, bias=True),
-            nn.Hardswish(),
-            nn.Linear(512, 128, bias=True),
-            nn.GELU(),
-            nn.Linear(128, classes, bias=True),
-        )
+        if kwargs.get("cls_head") == "simple":
+            self.head1 = nn.Linear(
+                base_model.feature_info[-1]["num_chs"],
+                classes, bias=True
+            )
+        elif kwargs.get("cls_head") == "2layer":
+            self.head1 = nn.Sequential(
+                nn.Linear(base_model.feature_info[-1]["num_chs"], 512, bias=True),
+                nn.Dropout(p=0.1, inplace=True),
+                nn.Hardswish(),
+                nn.Linear(512, 128, bias=True),
+                nn.Dropout(p=0.1, inplace=True),
+                nn.GELU(),
+                nn.Linear(128, classes, bias=True),
+            )
+
+        elif kwargs.get("cls_head") == "1layer":
+
+            self.head1 = nn.Sequential(
+                nn.Linear(base_model.feature_info[-1]["num_chs"], 128, bias=True),
+                nn.Dropout(p=0.1, inplace=True),
+                nn.GELU(),
+                nn.Linear(128, classes, bias=True),
+            )
+        else:
+            raise ValueError
 
         ## 30 seconds -> 5 seconds
         wav_crop_len = kwargs["duration"]
