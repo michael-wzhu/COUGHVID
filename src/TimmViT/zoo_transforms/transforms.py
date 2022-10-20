@@ -4,7 +4,7 @@ import audiomentations as AA
 set_1 = AA.Compose(
     [
         AA.AddBackgroundNoise(
-            sounds_path="src/TimmSED/audioaugments/aicrowd2020_noise_30sec/noise_30sec", min_snr_in_db=0, max_snr_in_db=3, p=0.25
+            sounds_path="srcssssss/TimmSED/audioaugments/aicrowd2020_noise_30sec/noise_30sec", min_snr_in_db=0, max_snr_in_db=3, p=0.25
         ),
     ]
 )

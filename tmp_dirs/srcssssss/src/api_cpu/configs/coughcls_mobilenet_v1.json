@@ -1,0 +1,50 @@
+{
+  "network": "TimmClassifier_v1",
+  "encoder_params": {
+    "encoder": "mobilenetv3_small_050",
+    "duration": 15,
+    "val_duration": 5,
+    "backbone_params": {
+      "in_chans": 1,
+      "drop_path_rate": 0.3,
+      "drop_rate": 0.4
+    },
+    "cls_head": "simple",
+    "mel_config": {"sample_rate": 16000,
+      "window_size": 2048,
+      "hop_size": 320,
+      "fmin": 50,
+      "fmax": 14000,
+      "mel_bins": 128,
+      "power": 2,
+      "top_db": null}
+  },
+  "train_transforms": "set_1",
+  "multiplier": 1,
+  "optimizer": {
+    "train_bs": 32,
+    "val_bs": 16,
+    "type": "AdamW",
+    "learning_rate": 0.2e-4,
+    "weight_decay": 1e-2,
+    "schedule": {
+      "type": "cosine",
+      "mode": "step",
+      "epochs": 30,
+      "params": {
+        "eta_min": 3e-7
+      }
+    }
+  },
+  "losses": [
+    {
+      "name": "CE",
+      "type": "CELossCalculator",
+      "weight": 1,
+      "display": true,
+      "params": {
+        "pos_weight": [2, 1]
+      }
+    }
+  ]
+}

@@ -123,7 +123,7 @@ def parse_args():
     parser = argparse.ArgumentParser("Pipeline")
     arg = parser.add_argument
     arg('--config', metavar='CONFIG_FILE', help='path to configuration file',
-        default="./src/TimmSED/configs/cls_vit_v1.json")
+        default="./srcssssss/TimmSED/configs/cls_vit_v1.json")
     arg('--workers', type=int, default=12, help='number of cpu threads to use PER GPU!')
     arg('--gpu', type=str, default='0', help='List of GPUs for parallel training, e.g. 0,1,2,3')
     arg('--output_dir', type=str, default='weights/')
@@ -132,7 +132,7 @@ def parse_args():
     arg('--prefix', type=str, default='val_')
     arg('--val_dir', type=str, default="validation")
     arg('--data_dir', type=str, default="./datasets/coughvid_v1/public_dataset")
-    arg('--folds_csv', type=str, default='src/TimmSED/data_process/folds_coughvid.csv')
+    arg('--folds_csv', type=str, default='srcssssss/TimmSED/data_process/folds_coughvid.csv')
     arg('--logdir', type=str, default='logs')
     arg('--zero_score', action='store_true', default=False)
     arg('--from_zero', action='store_true', default=False)
@@ -229,7 +229,7 @@ def main():
 if __name__ == '__main__':
     main()
 
-    # python src/TimmViT/train_classifier.py --data_dir ./datasets/covid19-cough/raw --folds_csv src/TimmSED/data_process/folds_covid19_coughs.csv --config src/TimmViT/configs/cls_vit_v1.json
+    # python srcssssss/TimmViT/train_classifier.py --data_dir ./datasets/covid19-cough/raw --folds_csv srcssssss/TimmSED/data_process/folds_covid19_coughs.csv --config srcssssss/TimmViT/configs/cls_vit_v1.json
 
     # vit_tiny_patch16_224: covid19-coughs, auc 0.???
 

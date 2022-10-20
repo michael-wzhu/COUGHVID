@@ -9,11 +9,12 @@
       "drop_path_rate": 0.3,
       "drop_rate": 0.4
     },
+    "cls_head": "simple",
     "mel_config": {"sample_rate": 16000,
       "window_size": 2048,
       "hop_size": 320,
-      "fmin": 50,
-      "fmax": 14000,
+      "fmin": 20,
+      "fmax": 24000,
       "mel_bins": 128,
       "power": 2,
       "top_db": null}

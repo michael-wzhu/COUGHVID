@@ -150,7 +150,7 @@ if __name__ == "__main__":
     print("run")
     dataset = AudioDataset(
         mode="train",
-        folds_csv="./src/TimmSED/folds.csv",
+        folds_csv="./srcssssss/TimmSED/folds.csv",
         dataset_dir="./datasets/coughvid_v1/public_dataset",
         fold=0,
         transforms=train_aug

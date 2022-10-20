@@ -82,19 +82,25 @@ class AudioEvaluator(Evaluator):
                 gts.append(np.array(outs[()]['gts']))
                 preds.append(np.array(outs[()]['preds']))
             gts = np.concatenate(gts, axis=0)
+            gts = gts[:, 1]
+            print("gts: ", gts)
             preds = np.concatenate(preds, axis=0)
+            # preds = preds[:, 1]
+            print("preds: ", preds)
+            print("preds: ", preds.shape)
+
             for threshold in np.arange(0.1, 0.9, 0.05):
                 print("threshold: ", threshold)
-                tnr = tn_score(torch.from_numpy(preds > threshold).float(), torch.from_numpy(gts))
-                tpr = tp_score(torch.from_numpy(preds > threshold).float(), torch.from_numpy(gts))
+                tnr = tn_score(torch.from_numpy(preds[:, 1] > threshold).float(), torch.from_numpy(gts))
+                tpr = tp_score(torch.from_numpy(preds[:, 1] > threshold).float(), torch.from_numpy(gts))
                 print(f"TPR: {tpr.item():0.4f} TNR: {tnr.item():0.4f}")
                 lb = float((tpr + tnr) / 2)
-                f1s = metric.get_f1(gts, preds, threshold=threshold)
-                auc = metric.get_auc(gts, preds, threshold=threshold)
-                print(f"auc: {auc}")
+                f1s = metric.get_f1(gts, preds[:, 1], threshold=threshold)
+                auc = metric.get_auc(gts, preds[:, 1], threshold=threshold)
+                print(f"f1: {f1s}; auc: {auc}")
 
                 #print(classification_report(gts, preds > threshold, target_names=CLASSES_21))
-                if auc > best_auc:
+                if f1s > best_f1:
                     best_lb = lb
                     best_f1 = f1s
                     best_auc = auc

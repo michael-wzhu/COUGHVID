@@ -21,7 +21,13 @@ if __name__ == "__main__":
     for samp in tqdm(metadata):
         print(samp)
 
-        label = samp["covid19"]
+        # label = samp.get("asymptomatic")
+        # if label == False:
+        #     label = 1
+        # else:
+        #     label = 0
+
+        label = samp.get("covid19")
         if label:
             label = 1
         else:

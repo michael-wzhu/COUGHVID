@@ -77,18 +77,19 @@ class AudioDataset(Dataset):
                 self.df = pd.concat([self.df] * multiplier, ignore_index=True)
 
     def load_one(self, filename, offset, duration):
-        #try:
+
         wav, sr = librosa.load(
             filename,
             sr=None,
             offset=offset,
             duration=duration
         )
-        
-        if sr != self.sr:
-            wav = librosa.resample(wav, orig_sr=sr, target_sr=self.sr)
-        #except:
-            #print("failed reading", filename)
+        try:
+            if sr != self.sr:
+                wav = librosa.resample(wav, orig_sr=sr, target_sr=self.sr)
+        except Exception as e:
+            print(e)
+
         return wav
 
     def get_weights(self):
@@ -120,8 +121,16 @@ class AudioDataset(Dataset):
             offset = 0
 
         wav = self.load_one(filename, offset=offset, duration=self.duration)
-        if wav.shape[0] < (self.dsr):
-            wav = np.pad(wav, (0, self.dsr - wav.shape[0]))
+        # print("wav: ", type(wav))
+        # if wav is not None:
+        #     print("wav: ", wav.shape)
+
+        if wav is None:
+            wav = np.zeros((self.dsr, ), dtype=np.int)
+        else:
+            if wav.shape[0] < self.dsr:
+                wav = np.pad(wav, (0, self.dsr - wav.shape[0]))
+
         if self.transforms:
             wav = self.transforms(wav, self.sr)
 
