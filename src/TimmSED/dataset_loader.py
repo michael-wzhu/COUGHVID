@@ -52,7 +52,7 @@ class AudioDataset(Dataset):
         self.mode = mode
 
         self.duration = duration
-        self.sr = 32000
+        self.sr = 16000
         self.dsr = self.duration * self.sr
 
         self.n_classes = n_classes

@@ -137,7 +137,7 @@ def parse_args():
     arg('--fold', type=int, default=0)
     arg('--prefix', type=str, default='val_')
     arg('--val_dir', type=str, default="validation")
-    arg('--data_dir', type=str, default="./datasets/coughvid_v1/public_dataset")
+    arg('--data_dir', type=str, default="")
     arg('--folds_csv', type=str, default='src/TimmSED/data_process/folds_coughvid.csv')
     arg('--logdir', type=str, default='logs')
     arg('--zero_score', action='store_true', default=False)
@@ -159,14 +159,14 @@ def parse_args():
 def create_data_datasets(args):
     conf = load_config(args.config)
     print("conf: ", conf)
-    train_period = conf["encoder_params"].get("duration") 
-    infer_period = conf["encoder_params"].get("val_duration")
+    train_duration = conf["encoder_params"].get("duration")
+    infer_duration = conf["encoder_params"].get("duration")
 
     print(f"""
     creating dataset for fold {args.fold}
     transforms                {conf.get("train_transforms")}
-    train_period              {train_period}
-    infer_period              {infer_period} 
+    train_duration              {train_duration}
+    infer_duration              {infer_duration} 
     """)
 
     train_transforms = zoo_transforms.__dict__[conf.get("train_transforms")]
@@ -178,7 +178,7 @@ def create_data_datasets(args):
         dataset_dir=args.data_dir,
         fold=args.fold,
         multiplier=conf.get("multiplier", 1),
-        duration=train_period,
+        duration=train_duration,
         transforms=train_transforms,
         n_classes=2
     )
@@ -187,7 +187,7 @@ def create_data_datasets(args):
         folds_csv=args.folds_csv,
         dataset_dir=args.data_dir,
         fold=args.fold,
-        duration=infer_period,
+        duration=infer_duration,
         n_classes=2
     )
     return train_dataset, val_dataset

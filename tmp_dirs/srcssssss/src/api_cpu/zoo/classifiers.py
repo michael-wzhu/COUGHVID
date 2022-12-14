@@ -365,9 +365,9 @@ class TimmClassifier_v2(nn.Module):
             power=mel_config['power'],
             normalized=False,
         )
-
         self.amplitude_to_db = ta.transforms.AmplitudeToDB(top_db=mel_config['top_db'])
         self.wav2img = torch.nn.Sequential(self.mel_spec, self.amplitude_to_db)
+
         self.enable_masking = enable_masking
         if enable_masking:
             self.freq_mask = ta.transforms.FrequencyMasking(24, iid_masks=True)
@@ -524,7 +524,6 @@ class TimmClassifier_v2(nn.Module):
             bs, time = x.shape
             x = x.reshape(bs * self.factor, time // self.factor)
         else:
-            ## only 5 seconds infer...
             x = x[:, 0, :]  # bs, ch, time -> bs, time
 
         with torch.cuda.amp.autocast(enabled=False):

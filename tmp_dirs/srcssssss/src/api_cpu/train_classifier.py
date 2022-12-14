@@ -94,7 +94,7 @@ class AudioEvaluator(Evaluator):
                 print(f"f1： {f1s}； auc: {auc}")
 
                 #print(classification_report(gts, preds > threshold, target_names=CLASSES_21))
-                if auc > best_auc:
+                if f1s > best_f1:
                     best_lb = lb
                     best_f1 = f1s
                     best_auc = auc
@@ -232,7 +232,7 @@ def main():
 if __name__ == '__main__':
     main()
 
-    # python srcssssss/TimmSED/train_classifier.py --data_dir ./datasets/covid19-cough/raw --folds_csv srcssssss/TimmSED/data_process/folds_covid19_coughs.csv --do_train --do_eval
+    # python src/api_cpu/train_classifier.py --data_dir ./datasets/covid19-cough/raw --folds_csv src/api_cpu/data_process/create_folds_covid19_coughs.py --do_train --do_eval
 
 
 

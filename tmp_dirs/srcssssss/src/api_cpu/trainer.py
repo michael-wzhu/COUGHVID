@@ -125,7 +125,8 @@ class PytorchTrainer(ABC):
             if (self.current_epoch + 1) % self.train_config.test_every == 0:
                 metrics = self.evaluator.validate(self.get_val_loader(), self.model,
                                                   local_rank=self.train_config.local_rank,
-                                                  snapshot_name=self.snapshot_name)
+                                                  snapshot_name=self.snapshot_name
+                                                  )
                 if self.train_config.local_rank == 0:
                     improved_metrics = self.evaluator.get_improved_metrics(self.current_metrics, metrics)
                     self.current_metrics.update(improved_metrics)

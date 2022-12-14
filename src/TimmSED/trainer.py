@@ -369,10 +369,10 @@ class PytorchTrainer(ABC):
         wav = torch.tensor(wav).unsqueeze(0)
 
         predictions = self.model(wav, is_test=True)
-        print(predictions)
+        # print(predictions)
 
         pred_logits = predictions['logit'].sigmoid().cpu().detach().numpy()
-        print("pred_logits: ", pred_logits)
+        # print("pred_logits: ", pred_logits)
 
         if pred_logits > threshold:
             pred_label = 1

@@ -14,6 +14,7 @@ import audiomentations as AA
 import torch
 from torch.utils.data import Dataset
 
+
 train_aug = AA.Compose(
     [
         AA.AddGaussianNoise(min_amplitude=0.001, max_amplitude=0.015, p=0.5),
@@ -112,7 +113,7 @@ class AudioDataset(Dataset):
 
         ## wav
         if self.mode == "train":
-            wav_len_sec =  librosa.get_duration(filename=filename)
+            wav_len_sec = librosa.get_duration(filename=filename)
             duration = self.duration
             max_offset = wav_len_sec - duration
             max_offset = max(max_offset, 1)

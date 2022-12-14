@@ -305,11 +305,11 @@ class TimmClassifier_v1(nn.Module):
             x = self.freq_mask(x)
             x = self.time_mask(x)
 
-        # print("x: ", x.shape)
+        print("1 x: ", x.shape)
         x = x.permute(0, 2, 1)
         # print("x: ", x.shape)
         x = x[:, None, :, :]
-        # print("x: ", x.shape)
+        print("2 x: ", x.shape)
         
         ## TODO: better loop
         xss = []
@@ -557,6 +557,7 @@ class TimmClassifier_v2(nn.Module):
 
             feat = self.gem(feat)
             feat = feat[:, :, 0, 0]
+            # print("feat: ", feat.shape)
 
             logit_ = linear_layer(feat)
             list_logits.append(
